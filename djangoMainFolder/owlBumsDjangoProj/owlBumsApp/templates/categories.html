@@ -1,0 +1,37 @@
+{%extends 'base.html' %}
+
+{% block content %}
+
+{% if category_reviews %}
+
+<h1>{{ cats }}</h1>
+
+<ul class="list-group">
+{% for review in category_reviews %}
+
+    <li class="list-group-item"><a href="{% url 'review-detail' review.pk %}">{{review.title}}</a>
+        <br/>
+        {{review.albumName}} by {{review.albumArtist}} 
+        <br/>
+        Genre: {{review.albumGenre}}
+        <br/>
+        Rating: {{review.albumScore}}
+        <br/>
+        by {{review.author}} - {{review.review_date}}
+        
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'update-review' review.pk %}">(Edit)</a>
+        <a href="{% url 'delete-review' review.pk %}">(Delete)</a>
+    {% endif %}
+
+{% endfor %}
+</ul>
+
+{% else %}
+ <h2>Sorry. This page does not exist...</h2>
+{% endif %}
+
+
+
+{% endblock %} 

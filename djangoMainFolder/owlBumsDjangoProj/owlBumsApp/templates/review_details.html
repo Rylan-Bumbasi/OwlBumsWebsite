@@ -1,0 +1,117 @@
+{%extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+
+<h1>{{ review.title }}</h1>
+<small>
+    By: {{review.author}} - 
+    {{review.review_date}}: <h3><br/>RATING: {{review.albumScore}}/10</h3>
+    <br/>
+    Category: <a href="{% url 'category' review.category %}">{{review.category}}</a>
+
+    {% if user.is_authenticated %}
+        {% if user.id == review.author.id %}
+    <br/>
+    <br/>
+    <a href="{% url 'update-review' review.pk %}">(Edit)</a>
+    <a href="{% url 'delete-review' review.pk %}">(Delete)</a>
+        {% endif %}
+
+    {% endif %}
+</small><br/>
+<hr>
+<br/>
+{%if review.albumArt %}
+    <img src="{{ review.albumArt.url }}"
+     class="rounded mx-auto d-block"
+     height="200"
+     width="200"
+     alt=""><br><br/>
+{% endif %}
+
+{{review.body |safe}}
+
+<br><br/>
+
+<a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+
+<br><br/>
+<hr>
+<br/>
+<form action="{% url 'like_review' review.pk %}" method = "POST">
+    
+    {% csrf_token %}
+    
+    {% if user.is_authenticated %}
+        {% if liked %}
+            <button type="submit", 
+                    name="review_id", 
+                    value="{{ review.id }}", 
+                    class="btn btn-danger btn-sm">Unlike
+            </button>
+        {% else %}
+            <button type="submit", 
+            name="review_id", 
+            value="{{ review.id }}", 
+            class="btn btn-primary btn-sm">
+            Like
+            </button>
+        {% endif %}
+    {% endif %}
+    - {{ total_likes }} Likes
+    
+
+</form>
+<br><br/>
+
+<div class="card mb-3">
+    <div class="row g-0">
+      <div class="col-md-2">
+        {% if review.author.profile.profile_pic %}
+        <img src="{{ review.author.profile.profile_pic.url }}" class="img-fluid rounded-start" alt="...">
+        {% else %}
+        <img src="{% static 'owlBumsApp/images/default_profile_pic.png' %}" class="img-fluid rounded-start" alt="...">
+        {% endif %}
+      </div>
+      <div class="col-md-10">
+        <div class="card-body">
+          <h5 class="card-title">
+                {{ review.author.first_name }}
+                {{ review.author.last_name }}
+          </h5>
+          <p class="small text-muted">
+
+            
+            <a href="{% url 'show_profile_page' review.author.profile.id %}">Profile Page</a> |
+
+            {% if review.author.profile.instagram_url %}
+            <a href="{{review.author.profile.instagram_url}}">Instagram</a> |
+            {% endif %}
+            
+            {% if review.author.profile.twitter_url %}
+            <a href="{{review.author.profile.twitter_url}}">Twitter</a> |
+            {% endif %}
+
+            {% if review.author.profile.instagram_url %}
+            <a href="{{review.author.profile.instagram_url}}">Spotify</a>
+            {% endif %}
+
+          </p>
+          <p class="card-text">{{ review.author.profile.bio }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+{% endblock %}

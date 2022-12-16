@@ -1,0 +1,19 @@
+{%extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+
+<h1>Review Catagories</h1>
+
+
+
+    {% for item in cat_menu_list %}
+        <a class="dropdown-item" href="{% url 'category' item %}">{{ item }}</a>
+    {% endfor %}
+
+
+
+{% endblock %}

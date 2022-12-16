@@ -1,0 +1,42 @@
+{%extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+<h1>Create New Review</h1>
+
+
+{% if user.is_authenticated %}
+
+    <div class="form-group">
+        <form method="POST"  enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media }}
+            {{ form.as_p }}
+            <button class="btn btn-secondary">Publish</button>
+        </form>
+    </div>
+    <br><br/>
+
+    <script>
+        var name = "{{ user.id }}";
+        document.getElementById("elder").value = name;
+    </script>
+
+
+
+{% else %}
+
+<h2>ERROR: User logged out</h2>
+
+
+
+{% endif %}
+
+
+
+
+
+{% endblock %}
